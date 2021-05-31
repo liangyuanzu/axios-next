@@ -18,17 +18,26 @@ export function buildURL(url: string, params: any): string {
 
   for (let [key, val] of Object.entries(params)) {
     if (val == null) continue
-    if (isDate(val)) {
-      val = val.toISOString()
-    } else if (isObject(val)) {
-      val = JSON.stringify(val)
+    let values: string[] = []
+    if (Array.isArray(val)) {
+      values = val
+      key += '[]'
+    } else {
+      values = [<any>val]
     }
-    parts.push(`${encode(key)}=${encode(val)}`)
+    values.forEach(v => {
+      if (isDate(v)) {
+        v = v.toISOString()
+      } else if (isObject(v)) {
+        v = JSON.stringify(v)
+      }
+      parts.push(`${encode(key)}=${encode(v)}`)
+    })
   }
 
   const serializedParams = parts.join('&')
   if (serializedParams) {
-    const markIndex = serializedParams.indexOf('#')
+    const markIndex = url.indexOf('#')
     if (markIndex !== -1) url = url.slice(0, markIndex)
     const str = url.indexOf('?') === -1 ? '?' : '&'
     url += str + serializedParams
