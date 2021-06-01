@@ -1,5 +1,6 @@
 import axios from '../../src/index'
 
+// test get 👇
 axios({
   method: 'get',
   url: '/base/get',
@@ -59,7 +60,9 @@ axios({
     bar: 'baz'
   }
 })
+// test get 👆
 
+// test post 👇
 axios({
   method: 'post',
   url: '/base/post',
@@ -75,3 +78,35 @@ axios({
   url: '/base/buffer',
   data: arr
 })
+// test post 👆
+
+// test request header 👇
+axios({
+  method: 'post',
+  url: '/base/post',
+  data: {
+    a: 1,
+    b: 2
+  }
+})
+
+axios({
+  method: 'post',
+  url: '/base/post',
+  headers: {
+    'content-type': 'application/json'
+  },
+  data: {
+    a: 1,
+    b: 2
+  }
+})
+
+const paramsString = 'q=URLUtils.searchParams&topic=api'
+const searchParams = new URLSearchParams(paramsString)
+axios({
+  method: 'post',
+  url: '/base/post',
+  data: searchParams
+})
+// test request header 👆

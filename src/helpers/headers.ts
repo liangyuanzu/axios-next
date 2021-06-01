@@ -1,5 +1,5 @@
 import { isPlainObject } from './util'
-import { CONTENT_TYPE } from '../const'
+import { CONTENT_TYPE, application } from '../const'
 
 function normalizeHeaderName(headers: any, normalizedName: string): void {
   if (!headers) return
@@ -16,7 +16,7 @@ export function processHeaders(headers: any, data: any): any {
 
   if (isPlainObject(data)) {
     if (headers && !headers[CONTENT_TYPE]) {
-      headers[CONTENT_TYPE] = 'application/json;charset=utf-8'
+      headers[CONTENT_TYPE] = application.json
     }
   }
 
