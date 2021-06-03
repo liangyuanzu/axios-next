@@ -4,16 +4,18 @@ import { parseHeaders } from './helpers/headers'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const { url, method = 'get', data = null, headers, responseType } = config
+    const { url, method = 'get', data = null, headers, responseType, timeout } = config
 
     const request = new XMLHttpRequest()
 
     if (responseType) request.responseType = responseType
 
+    if (timeout) request.timeout = timeout
+
     request.open(method.toUpperCase(), url, true)
 
     request.onreadystatechange = () => {
-      if (request.readyState !== 4) return
+      if (request.readyState !== 4 || request.status === 0) return
 
       const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData = responseType === 'text' ? request.responseText : request.response
@@ -25,7 +27,24 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         config,
         request
       }
-      resolve(response)
+      handleResponse(response)
+    }
+
+    function handleResponse(response: AxiosResponse): void {
+      const { status } = response
+      if ((status >= 200 && status < 300) || status === 304) {
+        resolve(response)
+      } else {
+        reject(new Error(`Request failed with status code ${status}`))
+      }
+    }
+
+    request.onerror = () => {
+      reject(new Error('Network Error'))
+    }
+
+    request.ontimeout = () => {
+      reject(new Error(`Timeout of ${timeout} ms exceeded`))
     }
 
     Object.keys(headers).forEach(key => {
