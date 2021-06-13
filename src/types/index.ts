@@ -64,6 +64,8 @@ export interface AxiosRequestConfig {
   transformResponse?: AxiosTransformer | AxiosTransformer[]
   CancelToken?: CancelToken
   withCredentials?: boolean
+  xsrfCookieName?: string
+  xsrfHeaderName?: string
 
   [propName: string]: any
 }
@@ -137,4 +139,9 @@ export interface Cancel {
 
 export interface CancelStatic {
   new (message: string): Cancel
+}
+
+export interface URLOrigin {
+  protocol: string
+  host: string
 }

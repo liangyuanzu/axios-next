@@ -1,4 +1,5 @@
 import { isDate, isPlainObject } from './util'
+import { URLOrigin } from '../types'
 
 function encode(val: any): string {
   return encodeURIComponent(val)
@@ -44,4 +45,20 @@ export function buildURL(url: string, params: any): string {
   }
 
   return url
+}
+
+function resolveURL(url: string): URLOrigin {
+  const urlParsingNode = document.createElement('a')
+  urlParsingNode.setAttribute('href', url)
+  const { protocol, host } = urlParsingNode
+
+  return {
+    protocol,
+    host
+  }
+}
+
+export function isURLSameOrigin(requestURL: string): boolean {
+  const parsedOrigin = resolveURL(requestURL)
+  return parsedOrigin.protocol === location.protocol && parsedOrigin.host === location.host
 }
