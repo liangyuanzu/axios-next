@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from '../types'
-import { CONTENT_TYPE } from '../const'
+import { CONTENT_TYPE, AUTHORIZATION } from '../const'
 import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
 import { isURLSameOrigin } from '../helpers/url'
@@ -20,7 +20,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       xsrfCookieName,
       xsrfHeaderName,
       onDownloadProgress,
-      onUploadProgress
+      onUploadProgress,
+      auth
     } = config
 
     const request = new XMLHttpRequest()
@@ -78,6 +79,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         if (xsrfValue && xsrfHeaderName) {
           headers[xsrfHeaderName] = xsrfValue
         }
+      }
+
+      if (auth) {
+        const { username, password } = auth
+        headers[AUTHORIZATION] = 'Basic ' + btoa(username + ':' + password)
       }
 
       Object.keys(headers).forEach(key => {
