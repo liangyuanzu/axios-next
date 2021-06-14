@@ -88,7 +88,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       }
 
       Object.keys(headers).forEach(key => {
-        if (data === null && key.toUpperCase() === CONTENT_TYPE) {
+        if (data === null && key.toUpperCase() === CONTENT_TYPE.toUpperCase()) {
           delete headers[key]
         } else {
           request.setRequestHeader(key, headers[key])
