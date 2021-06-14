@@ -14,7 +14,7 @@ function encode(val: any): string {
 
 export function buildURL(
   url: string,
-  params: any,
+  params?: any,
   paramsSerializer?: (params: any) => string
 ): string {
   if (!params) return url
