@@ -12,6 +12,10 @@ export function isPlainObject(val: any): val is Object {
   return toString.call(val) === '[object Object]'
 }
 
+export function isFormData(val: any): boolean {
+  return typeof val !== 'undefined' && val instanceof FormData
+}
+
 export function isURLSearchParams(val: any): val is URLSearchParams {
   return typeof val !== 'undefined' && val instanceof URLSearchParams
 }
@@ -43,8 +47,4 @@ export function deepMerge(...objs: any[]): any {
   })
 
   return res
-}
-
-export function isFormData(val: any): boolean {
-  return typeof val !== 'undefined' && val instanceof FormData
 }
